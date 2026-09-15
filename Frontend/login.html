@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login | Connecto</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="auth.css"
+    >
+</head>
+
+<body>
+
+    <main class="authPage">
+
+        <!-- LEFT BRAND AREA -->
+        <section class="authBrand">
+
+            <a
+                class="authLogo"
+                href="login.html"
+                aria-label="Connecto"
+            >
+                <span class="authLogoMark">C</span>
+                <span>Connecto</span>
+            </a>
+
+
+            <div class="brandMessage">
+
+                <span class="eyebrow">
+                    Your people. Your space.
+                </span>
+
+                <h1>
+                    Connect without the noise.
+                </h1>
+
+                <p>
+                    Share moments, discover people,
+                    message friends and keep everything
+                    you care about in one place.
+                </p>
+
+            </div>
+
+
+            <div class="brandDecoration">
+                <div class="orb orbOne"></div>
+                <div class="orb orbTwo"></div>
+                <div class="glassCard">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>Connecto</span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- LOGIN FORM AREA -->
+        <section class="authFormSide">
+
+            <div class="authCard">
+
+                <div class="mobileLogo">
+                    <span class="authLogoMark">C</span>
+                    <span>Connecto</span>
+                </div>
+
+
+                <div class="authHeading">
+
+                    <p class="smallTitle">
+                        Welcome back
+                    </p>
+
+                    <h2>
+                        Sign in to your account
+                    </h2>
+
+                    <p>
+                        Enter your details to continue to Connecto.
+                    </p>
+
+                </div>
+
+
+                <form
+                    id="loginForm"
+                    novalidate
+                >
+
+                    <!-- EMAIL / USERNAME -->
+                    <div class="formGroup">
+
+                        <label for="loginIdentifier">
+                            Email or username
+                        </label>
+
+                        <div class="inputBox">
+
+                            <i class="fa-regular fa-user"></i>
+
+                            <input
+                                id="loginIdentifier"
+                                name="identifier"
+                                type="text"
+                                autocomplete="username"
+                                placeholder="Enter email or username"
+                                required
+                            >
+
+                        </div>
+
+                        <p
+                            class="fieldError"
+                            id="identifierError"
+                        ></p>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+                    <div class="formGroup">
+
+                        <div class="labelRow">
+
+                            <label for="loginPassword">
+                                Password
+                            </label>
+
+                            <button
+                                class="linkButton"
+                                type="button"
+                                onclick="openForgotPassword()"
+                            >
+                                Forgot password?
+                            </button>
+
+                        </div>
+
+
+                        <div class="inputBox">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                            <input
+                                id="loginPassword"
+                                name="password"
+                                type="password"
+                                autocomplete="current-password"
+                                placeholder="Enter your password"
+                                required
+                            >
+
+                            <button
+                                class="passwordToggle"
+                                type="button"
+                                onclick="togglePassword()"
+                                aria-label="Show password"
+                            >
+                                <i
+                                    id="passwordEye"
+                                    class="fa-regular fa-eye"
+                                ></i>
+                            </button>
+
+                        </div>
+
+                        <p
+                            class="fieldError"
+                            id="passwordError"
+                        ></p>
+
+                    </div>
+
+
+                    <!-- REMEMBER ME -->
+                    <label class="rememberRow">
+
+                        <input
+                            id="rememberMe"
+                            type="checkbox"
+                        >
+
+                        <span>
+                            Keep me signed in on this device
+                        </span>
+
+                    </label>
+
+
+                    <!-- GENERAL ERROR -->
+                    <div
+                        id="loginMessage"
+                        class="authMessage hidden"
+                        role="alert"
+                    ></div>
+
+
+                    <!-- LOGIN -->
+                    <button
+                        id="loginButton"
+                        class="authPrimaryButton"
+                        type="submit"
+                    >
+                        <span id="loginButtonText">
+                            Sign In
+                        </span>
+
+                        <i
+                            id="loginSpinner"
+                            class="fa-solid fa-circle-notch fa-spin hidden"
+                        ></i>
+                    </button>
+
+
+                    <p class="accountText">
+                        New to Connecto?
+                        <a href="register.html">
+                            Create an account
+                        </a>
+                    </p>
+
+
+                    <p class="legalText">
+                        By continuing, you agree to Connecto's
+                        <a href="#">Terms</a>
+                        and
+                        <a href="#">Privacy Policy</a>.
+                    </p>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FORGOT PASSWORD DIALOG -->
+    <div
+        id="forgotPasswordModal"
+        class="authModal hidden"
+    >
+
+        <div class="authModalCard">
+
+            <button
+                class="modalClose"
+                type="button"
+                onclick="closeForgotPassword()"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+
+            <div class="modalIcon">
+                <i class="fa-solid fa-key"></i>
+            </div>
+
+            <h3>
+                Reset your password
+            </h3>
+
+            <p>
+                Enter your account email.
+                Connecto will send password reset instructions.
+            </p>
+
+
+            <label for="forgotEmail">
+                Email address
+            </label>
+
+            <input
+                id="forgotEmail"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+            >
+
+
+            <div
+                id="forgotMessage"
+                class="authMessage hidden"
+            ></div>
+
+
+            <button
+                class="authPrimaryButton"
+                type="button"
+                onclick="submitForgotPassword()"
+            >
+                Send reset link
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script src="api.js"></script>
+    <script src="login.js"></script>
+
+</body>
+</html>

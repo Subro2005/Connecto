@@ -1,0 +1,782 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #09090d;
+    --panel: #111117;
+    --panel-soft: #17171f;
+
+    --text: #f6f4fa;
+    --muted: #9995a7;
+
+    --border: rgba(255, 255, 255, 0.09);
+
+    --purple: #9678f2;
+    --pink: #db62ab;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+
+    color: var(--text);
+    background: var(--bg);
+
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+}
+
+
+/* ======================================================
+   PAGE
+   ====================================================== */
+
+.authPage {
+    display: grid;
+    grid-template-columns:
+        minmax(420px, 1.05fr)
+        minmax(460px, 0.95fr);
+
+    min-height: 100vh;
+}
+
+
+/* ======================================================
+   BRAND SIDE
+   ====================================================== */
+
+.authBrand {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 100vh;
+    padding: 42px 54px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 70% 20%,
+            rgba(143, 112, 235, 0.22),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 20% 86%,
+            rgba(209, 84, 157, 0.15),
+            transparent 32%
+        ),
+        linear-gradient(
+            145deg,
+            #12111a,
+            #0b0b10
+        );
+
+    border-right:
+        1px solid var(--border);
+}
+
+.authLogo {
+    position: relative;
+    z-index: 3;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+
+    width: fit-content;
+
+    text-decoration: none;
+
+    font-size: 22px;
+    font-weight: 850;
+    letter-spacing: -0.7px;
+}
+
+.authLogoMark {
+    display: grid;
+    place-items: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 13px;
+
+    color: #17131d;
+
+    background:
+        linear-gradient(
+            145deg,
+            #c6b8ff,
+            #8d75e9 55%,
+            #ef7dba
+        );
+
+    box-shadow:
+        0 8px 26px
+        rgba(128, 94, 220, 0.25);
+
+    font-weight: 900;
+}
+
+.brandMessage {
+    position: relative;
+    z-index: 3;
+
+    max-width: 560px;
+    margin: auto 0;
+}
+
+.eyebrow {
+    display: inline-flex;
+
+    padding: 7px 12px;
+
+    border:
+        1px solid rgba(169, 143, 249, 0.19);
+
+    border-radius: 999px;
+
+    color: #c9bbf8;
+
+    background:
+        rgba(150, 120, 242, 0.08);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.brandMessage h1 {
+    max-width: 560px;
+
+    margin: 22px 0 17px;
+
+    font-size:
+        clamp(44px, 5vw, 74px);
+
+    line-height: 0.99;
+
+    letter-spacing: -3.5px;
+}
+
+.brandMessage p {
+    max-width: 510px;
+
+    margin: 0;
+
+    color: #a5a0b1;
+
+    font-size: 17px;
+    line-height: 1.7;
+}
+
+.brandDecoration {
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+}
+
+.orb {
+    position: absolute;
+
+    border-radius: 50%;
+
+    filter: blur(1px);
+}
+
+.orbOne {
+    right: -100px;
+    top: 25%;
+
+    width: 340px;
+    height: 340px;
+
+    border:
+        1px solid rgba(188, 166, 255, 0.14);
+
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            rgba(191, 171, 255, 0.18),
+            rgba(101, 77, 173, 0.035) 60%,
+            transparent 72%
+        );
+}
+
+.orbTwo {
+    left: 18%;
+    bottom: -175px;
+
+    width: 390px;
+    height: 390px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(219, 98, 171, 0.10),
+            transparent 67%
+        );
+}
+
+.glassCard {
+    position: absolute;
+
+    right: 10%;
+    bottom: 11%;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 16px 20px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 17px;
+
+    color: #e8e3f3;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    box-shadow:
+        0 18px 60px rgba(0, 0, 0, 0.20);
+
+    backdrop-filter: blur(18px);
+
+    font-weight: 750;
+}
+
+
+/* ======================================================
+   FORM SIDE
+   ====================================================== */
+
+.authFormSide {
+    display: grid;
+    place-items: center;
+
+    padding: 50px 28px;
+
+    background:
+        radial-gradient(
+            circle at 80% 8%,
+            rgba(135, 103, 220, 0.08),
+            transparent 25%
+        ),
+        #0b0b10;
+}
+
+.authCard {
+    width: min(100%, 455px);
+
+    padding: 38px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(23, 23, 31, 0.96),
+            rgba(15, 15, 21, 0.98)
+        );
+
+    box-shadow:
+        0 28px 80px
+        rgba(0, 0, 0, 0.29);
+}
+
+.mobileLogo {
+    display: none;
+}
+
+.authHeading {
+    margin-bottom: 30px;
+}
+
+.smallTitle {
+    margin: 0 0 8px;
+
+    color: #ae98f7;
+
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+}
+
+.authHeading h2 {
+    margin: 0;
+
+    font-size: 31px;
+    letter-spacing: -1.2px;
+}
+
+.authHeading > p:last-child {
+    margin: 10px 0 0;
+
+    color: var(--muted);
+
+    line-height: 1.55;
+}
+
+
+/* ======================================================
+   FORM
+   ====================================================== */
+
+.formGroup {
+    margin-bottom: 19px;
+}
+
+.formGroup label,
+.authModalCard label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #d7d3df;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.labelRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.labelRow label {
+    margin-bottom: 8px;
+}
+
+.linkButton {
+    margin: 0 0 8px;
+
+    padding: 0;
+
+    border: none;
+
+    color: #af95ff;
+
+    background: transparent;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.inputBox {
+    display: flex;
+    align-items: center;
+
+    min-height: 51px;
+
+    padding: 0 14px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 12px;
+
+    background: #0e0e14;
+
+    transition:
+        border 0.17s ease,
+        box-shadow 0.17s ease;
+}
+
+.inputBox:focus-within {
+    border-color:
+        rgba(164, 134, 250, 0.47);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(150, 120, 242, 0.08);
+}
+
+.inputBox > i {
+    width: 22px;
+
+    color: #777384;
+
+    font-size: 15px;
+}
+
+.inputBox input {
+    flex: 1;
+
+    width: 100%;
+
+    padding: 14px 8px;
+
+    border: none;
+    outline: none;
+
+    color: white;
+
+    background: transparent;
+}
+
+.inputBox input::placeholder,
+.authModalCard input::placeholder {
+    color: #625f6c;
+}
+
+.passwordToggle {
+    display: grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+
+    color: #858191;
+
+    background: transparent;
+}
+
+.fieldError {
+    min-height: 15px;
+
+    margin: 6px 2px 0;
+
+    color: #ff889d;
+
+    font-size: 11px;
+}
+
+.rememberRow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    width: fit-content;
+
+    margin: 4px 0 21px;
+
+    color: #a9a5b2;
+
+    font-size: 13px;
+}
+
+.rememberRow input {
+    accent-color: var(--purple);
+}
+
+.authPrimaryButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    width: 100%;
+    min-height: 50px;
+
+    padding: 0 18px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 12px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7359d3,
+            #a74f92
+        );
+
+    box-shadow:
+        0 10px 28px
+        rgba(86, 55, 160, 0.22);
+
+    font-weight: 800;
+
+    transition:
+        transform 0.18s ease,
+        opacity 0.18s ease;
+}
+
+.authPrimaryButton:hover {
+    transform: translateY(-1px);
+}
+
+.authPrimaryButton:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.6;
+
+    transform: none;
+}
+
+.accountText {
+    margin: 24px 0 0;
+
+    text-align: center;
+
+    color: #94909f;
+
+    font-size: 13px;
+}
+
+.accountText a {
+    color: #b19aff;
+
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.legalText {
+    margin: 20px 0 0;
+
+    color: #696675;
+
+    text-align: center;
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.legalText a {
+    color: #898494;
+}
+
+.authMessage {
+    margin-bottom: 14px;
+
+    padding: 10px 12px;
+
+    border:
+        1px solid rgba(255, 113, 139, 0.19);
+
+    border-radius: 10px;
+
+    color: #ff9aae;
+
+    background:
+        rgba(255, 87, 118, 0.06);
+
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.authMessage.success {
+    border-color:
+        rgba(89, 214, 157, 0.18);
+
+    color: #8ee6b9;
+
+    background:
+        rgba(73, 204, 144, 0.06);
+}
+
+
+/* ======================================================
+   MODAL
+   ====================================================== */
+
+.authModal {
+    position: fixed;
+    inset: 0;
+
+    z-index: 50;
+
+    display: grid;
+    place-items: center;
+
+    padding: 20px;
+
+    background:
+        rgba(4, 4, 7, 0.76);
+
+    backdrop-filter: blur(10px);
+}
+
+.authModalCard {
+    position: relative;
+
+    width: min(100%, 420px);
+
+    padding: 34px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #191921,
+            #111117
+        );
+
+    box-shadow:
+        0 30px 85px
+        rgba(0, 0, 0, 0.48);
+}
+
+.authModalCard h3 {
+    margin: 17px 0 8px;
+
+    font-size: 24px;
+}
+
+.authModalCard > p {
+    margin: 0 0 22px;
+
+    color: var(--muted);
+
+    line-height: 1.55;
+}
+
+.authModalCard input {
+    width: 100%;
+
+    margin-bottom: 15px;
+
+    padding: 13px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 11px;
+
+    outline: none;
+
+    color: white;
+
+    background: #0d0d12;
+}
+
+.modalClose {
+    position: absolute;
+
+    right: 18px;
+    top: 18px;
+
+    display: grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 9px;
+
+    color: #c8c4d0;
+
+    background:
+        rgba(255, 255, 255, 0.035);
+}
+
+.modalIcon {
+    display: grid;
+    place-items: center;
+
+    width: 48px;
+    height: 48px;
+
+    border-radius: 14px;
+
+    color: #d4c5ff;
+
+    background:
+        rgba(150, 120, 242, 0.12);
+}
+
+
+/* ======================================================
+   HELPERS
+   ====================================================== */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ======================================================
+   RESPONSIVE
+   ====================================================== */
+
+@media (max-width: 900px) {
+
+    .authPage {
+        grid-template-columns: 1fr;
+    }
+
+    .authBrand {
+        display: none;
+    }
+
+    .authFormSide {
+        min-height: 100vh;
+
+        padding: 28px 18px;
+    }
+
+    .mobileLogo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        margin-bottom: 32px;
+
+        font-size: 20px;
+        font-weight: 850;
+    }
+
+    .authCard {
+        padding: 30px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .authCard {
+        padding: 25px 18px;
+
+        border-radius: 18px;
+    }
+
+    .authHeading h2 {
+        font-size: 27px;
+    }
+}

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connecto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="logo">
+            <span class="logoMark">C</span>
+            <span class="logoText">Connecto</span>
+        </div>
+
+        <button id="homeButton" class="navButton activeButton" onclick="showPage('home')">
+            <i class="fa-solid fa-house"></i><span>Home</span>
+        </button>
+
+        <button id="reelsButton" class="navButton" onclick="showPage('reels')">
+            <i class="fa-solid fa-clapperboard"></i><span>Reels</span>
+        </button>
+
+        <button id="messageButton" class="navButton" onclick="showPage('message')">
+            <i class="fa-regular fa-paper-plane"></i><span>Message</span>
+        </button>
+
+        <button id="searchButton" class="navButton" onclick="showPage('search')">
+            <i class="fa-solid fa-magnifying-glass"></i><span>Search</span>
+        </button>
+
+        <button id="profileButton" class="navButton" onclick="showPage('profile')">
+            <i class="fa-regular fa-user"></i><span>Profile</span>
+        </button>
+
+        <button class="createButton" onclick="openCreatePost()">
+            <i class="fa-solid fa-plus"></i><span>Create</span>
+        </button>
+    </aside>
+
+
+    <main class="mainContent">
+
+        <!-- HOME -->
+        <section id="home" class="page">
+
+            <div class="pageHeading">
+                <h1>Home</h1>
+                <p>See what is happening today.</p>
+            </div>
+
+            <!-- Fixed-size story area -->
+            <div class="storyBar">
+                <div id="storiesList" class="stories">
+
+                    <div class="storyItem">
+                        <div class="storyRing addRing" onclick="openStoryCreator()">
+                            <div class="storyCircle addStory">
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                        </div>
+                        <p>Add Story</p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Uploaded posts -->
+            <div id="postList" class="postList"></div>
+
+            <div id="emptyHome" class="emptyState">
+                <i class="fa-regular fa-images"></i>
+                <h3>No posts yet</h3>
+                <p>Use Create to add your first photo.</p>
+            </div>
+        </section>
+
+
+        <!-- REELS -->
+        <section id="reels" class="page hidden">
+
+            <div class="reelsScreen">
+
+                <div id="reelsList" class="reelsList"></div>
+
+                <div id="noReelsMessage" class="emptyState">
+                    <i class="fa-solid fa-clapperboard"></i>
+                    <h3>No reels yet</h3>
+                    <p>Upload a video from Create.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MESSAGES -->
+        <section id="message" class="page hidden">
+
+            <div class="messageContainer">
+
+                <!-- LEFT: ONLY PEOPLE YOU FOLLOW -->
+                <aside class="messageUsersPanel">
+
+                    <div class="messagePanelTitle">
+                        <h2>Messages</h2>
+                        <p>People you follow</p>
+                    </div>
+
+                    <div id="messageUsers" class="messageUsers"></div>
+
+                    <p id="noFollowedUsers" class="messageEmpty">
+                        Follow a user first. Their name will appear here.
+                    </p>
+
+                </aside>
+
+
+                <!-- RIGHT: CHAT BOX -->
+                <div class="chatArea">
+
+                    <div class="chatHeader" id="chatHeader">
+                        Select a user to start chatting
+                    </div>
+
+                    <div id="chatMessages" class="chatMessages">
+                        <p class="muted">Your conversation will appear here.</p>
+                    </div>
+
+                    <div class="messageInputArea">
+                        <input
+                            type="text"
+                            id="messageInput"
+                            placeholder="Message..."
+                            onkeydown="if(event.key === 'Enter') sendMessage()"
+                        >
+
+                        <button onclick="sendMessage()" title="Send">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SEARCH -->
+        <section id="search" class="page hidden">
+
+            <div class="pageHeading">
+                <h1>Search</h1>
+                <p>Find people who have a Connecto account.</p>
+            </div>
+
+            <div class="simpleSearchBar">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by name or username"
+                    onkeydown="if(event.key === 'Enter') searchUsers()"
+                >
+
+                <button onclick="searchUsers()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Search
+                </button>
+            </div>
+
+            <div id="searchResults" class="searchResults"></div>
+
+
+            <div class="recentSearchSection">
+                <div class="recentSearchTitle">
+                    <h3>Recent searches</h3>
+                    <button onclick="clearRecentSearches()">Clear</button>
+                </div>
+
+                <div id="recentSearchList" class="recentSearchList"></div>
+
+                <p id="noRecentSearch" class="muted">
+                    No recent searches.
+                </p>
+            </div>
+
+        </section>
+
+
+        <!-- PROFILE -->
+        <section id="profile" class="page hidden">
+
+            <!-- Shown only for a newly logged-in user who has not made a profile yet. -->
+            <div id="profileSetupState" class="profileSetupState">
+                <div class="profileSetupIcon">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <h2>Create your Connecto profile</h2>
+                <p>Add your name, username and bio so people can recognize you.</p>
+                <button class="profileSetupButton" type="button" onclick="openCreateAccount()">
+                    <i class="fa-solid fa-user-plus"></i>
+                    Create Account
+                </button>
+            </div>
+
+            <div id="profileCard" class="profileCard hidden">
+                <div class="coverPhoto"></div>
+
+                <div class="profileInformation">
+
+                    <!-- PROFILE IMAGE -->
+                    <div class="profilePhotoWrapper">
+
+                        <div class="profilePhoto" id="profilePhoto">
+                            SD
+                        </div>
+
+                        <!-- SAME IDEA AS YOUR STORY + BUTTON -->
+                        <button
+                            class="profileAddButton"
+                            onclick="openProfileImagePicker()"
+                            title="Add profile photo"
+                        >
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+
+                        <input
+                            type="file"
+                            id="profileImageInput"
+                            accept="image/*"
+                            hidden
+                        >
+
+                    </div>
+
+
+                    <div>
+                        <h1 id="profileDisplayName">Your Name</h1>
+                        <p class="username" id="profileDisplayUsername">@username</p>
+                        <p id="profileDisplayBio">Add a short bio to your Connecto profile.</p>
+                        <button class="editProfileButton" type="button" onclick="openEditProfile()"><i class="fa-solid fa-pen"></i> Edit Profile</button>
+                    </div>
+
+                </div>
+
+
+                <!-- POST COUNT -->
+                <div class="profilePostCount">
+                    <b id="postsCount">0</b>
+                    <span>Posts</span>
+                </div>
+
+
+                <!-- FOLLOWERS + FOLLOWING RECTANGLE BAR -->
+                <div class="followStatsBar">
+
+                    <div class="followStat">
+                        <span>Followers</span>
+                        <b id="followersCount">0</b>
+                    </div>
+
+                    <div class="followDivider"></div>
+
+                    <div class="followStat">
+                        <span>Following</span>
+                        <b id="followingCount">0</b>
+                    </div>
+
+                </div>
+
+                <div class="profileTabs">
+                    <button id="profilePostsTab" class="profileTab activeProfileTab" onclick="showProfilePosts()">
+                        <i class="fa-solid fa-table-cells"></i> Posts
+                    </button>
+
+                    <button id="savedTab" class="profileTab" onclick="showSavedPosts()">
+                        <i class="fa-regular fa-bookmark"></i> Saved
+                    </button>
+                </div>
+
+                <div id="profilePosts" class="profilePosts"></div>
+                <div id="savedPosts" class="profilePosts hidden"></div>
+
+                <p id="noSavedMessage" class="profileEmpty hidden">No saved posts yet.</p>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+
+<!-- STORY CREATOR -->
+<div id="storyModal" class="modal hidden">
+    <div class="modalContent">
+        <button class="closeButton" onclick="closeStoryCreator()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <h2>Create Story</h2>
+
+        <button class="chooseFileButton" onclick="chooseStoryPhoto()">
+            <i class="fa-regular fa-image"></i> Select Photo
+        </button>
+
+        <input type="file" id="storyInput" accept="image/*" hidden>
+
+        <div id="storyPreviewBox" class="storyPreviewBox hidden">
+            <img id="storyPreviewImage" alt="Story preview">
+            <div id="storyOverlayPreview" class="storyOverlayPreview"></div>
+        </div>
+
+        <input type="text" id="storyOverlayText" placeholder="Write text over the picture" oninput="updateStoryOverlay()">
+        <input type="text" id="storyCaption" placeholder="Story caption">
+
+        <button class="primaryButton" onclick="addStory()">
+            Add Story
+        </button>
+    </div>
+</div>
+
+
+<!-- STORY VIEWER -->
+<div id="storyViewer" class="modal hidden">
+    <div class="storyViewerContent">
+        <button class="viewerClose" onclick="closeStoryViewer()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div id="viewerUsername" class="viewerUsername"></div>
+        <img id="viewStoryImage" alt="Story">
+        <div id="viewStoryOverlay" class="viewStoryOverlay"></div>
+        <p id="viewStoryCaption"></p>
+    </div>
+</div>
+
+
+<!-- CREATE POST / REEL -->
+<div id="createPostModal" class="modal hidden">
+    <div class="modalContent">
+        <button class="closeButton" onclick="closeCreatePost()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <h2>Create</h2>
+        <p class="muted">Choose a photo for Home or a video for Reels.</p>
+
+        <input type="file" id="postFile" accept="image/*,video/*" onchange="previewPostFile()">
+
+        <div id="postPreview" class="postPreview hidden"></div>
+
+        <textarea id="postCaption" placeholder="Write your caption"></textarea>
+
+        <button class="primaryButton" onclick="createPost()">
+            Post
+        </button>
+    </div>
+</div>
+
+
+<!-- SHARE MENU -->
+<div id="shareModal" class="modal hidden">
+    <div class="shareBox">
+        <button class="closeButton" onclick="closeShareMenu()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <h2>Share Post</h2>
+
+        <div class="shareOptions">
+            <button onclick="shareTo('Facebook')">
+                <i class="fa-brands fa-facebook"></i>
+                Facebook
+            </button>
+
+            <button onclick="shareTo('WhatsApp')">
+                <i class="fa-brands fa-whatsapp"></i>
+                WhatsApp
+            </button>
+
+            <button onclick="shareTo('X')">
+                <i class="fa-brands fa-x-twitter"></i>
+                X
+            </button>
+
+            <button onclick="copyPostLink()">
+                <i class="fa-solid fa-link"></i>
+                Copy Link
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- FIRST-TIME PROFILE SETUP -->
+<div class="modal hidden" id="createAccountModal">
+    <div class="createAccountCard">
+        <button class="createAccountClose" type="button" onclick="closeCreateAccount()" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="createAccountBrand">
+            <span class="createAccountLogo">C</span>
+            <span>Connecto</span>
+        </div>
+
+        <div class="createAccountHero">
+            <div class="createAccountAvatarPreview" id="createAccountAvatarPreview">
+                <i class="fa-regular fa-user"></i>
+            </div>
+            <div>
+                <span class="createAccountEyebrow">NEW PROFILE</span>
+                <h2>Create Account</h2>
+                <p>Set up your public profile. You can edit these details later.</p>
+            </div>
+        </div>
+
+        <div class="createAccountForm">
+            <label for="createAccountName">Name</label>
+            <div class="createAccountInputWrap">
+                <i class="fa-regular fa-user"></i>
+                <input id="createAccountName" type="text" maxlength="50" placeholder="Your full name" autocomplete="name">
+            </div>
+            <small id="createAccountNameError" class="createAccountError"></small>
+
+            <label for="createAccountUsername">Username</label>
+            <div class="createAccountInputWrap usernameInputWrap">
+                <span>@</span>
+                <input id="createAccountUsername" type="text" maxlength="30" placeholder="yourusername" autocomplete="username">
+            </div>
+            <small id="createAccountUsernameError" class="createAccountError"></small>
+
+            <label for="createAccountBio">Bio <span>optional</span></label>
+            <div class="createAccountBioWrap">
+                <textarea id="createAccountBio" maxlength="160" placeholder="Tell people a little about yourself..."></textarea>
+                <span id="createAccountBioCount">0/160</span>
+            </div>
+            <small id="createAccountBioError" class="createAccountError"></small>
+
+            <button class="createAccountSubmit" type="button" onclick="createProfileAccount()">
+                Create Account
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="api.js"></script>
+<script src="script.js"></script>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal hidden" id="editProfileModal">
+        <div class="modalContent editProfileModalContent">
+            <div class="modalHeader">
+                <h2>Edit Profile</h2>
+                <button class="closeButton" type="button" onclick="closeEditProfile()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <label class="editProfileLabel" for="editProfileName">Name</label>
+            <input id="editProfileName" class="editProfileInput" type="text" maxlength="50" placeholder="Your name">
+            <label class="editProfileLabel" for="editProfileBio">Bio</label>
+            <textarea id="editProfileBio" class="editProfileBio" maxlength="160" placeholder="Write your bio"></textarea>
+            <button class="primaryButton" type="button" onclick="saveProfileChanges()">Save Changes</button>
+        </div>
+    </div>
+
+</body>
+</html>
