@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import bcrypt from "bcrypt"
 
 const userSchema= new mongoose.Schema(
     {
@@ -62,3 +63,45 @@ const user =mongoose.model("user",userSchema)
 
 
 export default user
+
+
+userSchema.pre("save",async function(){
+    if(!isModified ("password")){
+        return next()
+    }
+    this.password=await bcrypt.hash(this.password,10)
+    next();
+
+})
+
+userSchema.methods.isPasswordCorrect=async function (password) {
+    return await bcrypt.compare(password,this.password)
+}
+
+userSchema.methods.generateAccessToken=function(){
+    return jwt.sign(
+        {
+            id:this._id,
+            username:this.username,
+            email:this.email,
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        {
+            expiresIn: "1h",
+        },
+    )
+
+}
+
+
+userSchema.methods.generateRefreshToken=function(){
+    return jwt.sign(
+        {
+            id:this._id,
+        },
+        process.env.REFRESH_TOKEN_SECRET,
+        {
+            expiresIn:"7d",
+        },
+    )
+}
