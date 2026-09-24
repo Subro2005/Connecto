@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      default:"",
     },
     username: {
       type: String,
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema(
         ref: "post",
       },
     ],
-    refreshtokens: {
+    refreshToken: {
       type: String,
       default: "",
     },
@@ -106,6 +106,6 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-const user = mongoose.model("user", userSchema);
+const User = mongoose.model("user", userSchema);
 
-export default user;
+export default User;

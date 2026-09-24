@@ -1,4 +1,4 @@
-class ApiError extends Error {
+class Apierror extends Error {
     constructor(statusCode, message = "Something went wrong") {
         super(message);
 
