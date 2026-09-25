@@ -173,42 +173,118 @@ const getCurrentUser=asyncHandler(async(req,res)=>{
     .json(new ApiResponse(200,req.user,"user feteched successfully"))
 })
 
-const forgetpassword=asyncHandler(async(req,res)=>{
+const forgotPassword = asyncHandler(async (req, res) => {
 
-    const {email}=req.body;
+    const { email } = req.body;
 
-    if(!email){
-        throw new Apierror(200,"email not found")
+    if (!email) {
+        throw new Apierror(400, "Email is required");
     }
 
-    const user=await User.findOne({email});
+    // Find the user
+    const user = await User.findOne({ email });
 
-    if(!user){
-        throw new Apierror(200,"user not found")
+    if (!user) {
+        throw new Apierror(404, "User not found");
     }
 
-    const resetToken=crypto
-    .randomBytes(32)
-    .toString("hex")
+    // 1. Create ORIGINAL reset token
+    const resetToken = crypto
+        .randomBytes(32)
+        .toString("hex");
 
-    const hashedToken=crypto
-    .createHash("sha256")
-    .update(resetToken)
-    .digest("hex");
+    // 2. Hash the reset token
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
 
-    user.resetPasswordToken=hashedToken;
-    user.resetPasswordExpiry = Date.now() + 15 * 60 * 1000;
+    // 3. Store HASHED token in MongoDB
+    user.resetPasswordToken = hashedToken;
+
+    // Token expires after 15 minutes
+    user.resetPasswordExpiry =
+        Date.now() + 15 * 60 * 1000;
 
     await user.save({
-        validateBeforeSave:false,
-    })
+        validateBeforeSave: false
+    });
+
+    // 4. Create reset link containing ORIGINAL token
+    const resetLink =
+        `http://localhost:5173/reset-password/${resetToken}`;
 
     return res
-    .status(200)
-    .json(new ApiResponse(200),{resetToken},"reset Token created")
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {
+                    resetLink
+                },
+                "Reset link created"
+            )
+        );
+});
 
-})
+const resetPassword = asyncHandler(async (req, res) => {
 
+    // ABC123 comes from /reset-password/ABC123
+    const { token } = req.params;
+
+    // User types this in the reset password form
+    const { newPassword } = req.body;
+
+    if (!token || !newPassword) {
+        throw new Apierror(
+            400,
+            "Token and new password are required"
+        );
+    }
+
+    // Hash ABC123 again
+    const hashedToken = crypto
+        .createHash("sha256")
+        .update(token)
+        .digest("hex");
+
+    // Find user whose stored hash matches
+    // AND whose token hasn't expired
+    const user = await User.findOne({
+        resetPasswordToken: hashedToken,
+
+        resetPasswordExpiry: {
+            $gt: Date.now()
+        }
+    });
+
+    if (!user) {
+        throw new Apierror(
+            400,
+            "Reset token is invalid or expired"
+        );
+    }
+
+    // Set new password
+    user.password = newPassword;
+
+    // Reset token cannot be used again
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiry = undefined;
+
+    // Your pre("save") hashes newPassword automatically
+    await user.save();
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {},
+                "Password reset successfully"
+            )
+        );
+});
 
 export {
     registeruser,
@@ -216,7 +292,9 @@ export {
     logoutUser,
     getCurrentUser,
     refreshAccessToken,
-    forgetpassword,
+    forgotPassword,
+    resetPassword,
+
 
 
 
