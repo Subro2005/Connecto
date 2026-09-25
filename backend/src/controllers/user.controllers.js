@@ -3,6 +3,7 @@ import {Apierror} from "../utils/Apierror.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import { asyncHandler } from "../utils/asynchandler.js"
 import jwt from "jsonwebtoken";
+import crypto from "crypto"
 
 const registeruser=asyncHandler(async (req,res)=>{
 
@@ -57,6 +58,7 @@ const loginuser = asyncHandler(async (req, res) => {
     if (!checkuser) {
         throw new Apierror(401, "Invalid credentials");
     }
+
 
     const accessToken = newuser.generateAccessToken();
     const refreshToken = newuser.generateRefreshToken();
@@ -171,7 +173,41 @@ const getCurrentUser=asyncHandler(async(req,res)=>{
     .json(new ApiResponse(200,req.user,"user feteched successfully"))
 })
 
+const forgetpassword=asyncHandler(async(req,res)=>{
 
+    const {email}=req.body;
+
+    if(!email){
+        throw new Apierror(200,"email not found")
+    }
+
+    const user=await User.findOne({email});
+
+    if(!user){
+        throw new Apierror(200,"user not found")
+    }
+
+    const resetToken=crypto
+    .randomBytes(32)
+    .toString("hex")
+
+    const hashedToken=crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+    user.resetPasswordToken=hashedToken;
+    user.resetPasswordExpiry = Date.now() + 15 * 60 * 1000;
+
+    await user.save({
+        validateBeforeSave:false,
+    })
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200),{resetToken},"reset Token created")
+
+})
 
 
 export {
@@ -180,6 +216,8 @@ export {
     logoutUser,
     getCurrentUser,
     refreshAccessToken,
+    forgetpassword,
+
 
 
 }
