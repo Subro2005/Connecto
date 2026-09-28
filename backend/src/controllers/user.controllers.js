@@ -286,6 +286,108 @@ const resetPassword = asyncHandler(async (req, res) => {
         );
 });
 
+const changePassword=asyncHandler(async(req,res)=>{
+    
+    const {oldPassword,newPassword}=req.body;
+
+    if(!oldPassword ||!newPassword ){
+        throw new Apierror(400,"Enter your Password")
+    }
+
+    const user=await User.findById(req.user._id).select("+password");
+
+    if(!user){
+        throw new Apierror(400,"user not found");
+    }
+
+    const iscorrect=await user.isPasswordCorrect(oldPassword);
+
+    if(!iscorrect){
+        throw new Apierror(400,"old password not correct");
+    }
+
+    user.password=newPassword;
+
+    await user.save();
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200,{},"password chnsaged successfully"))
+})
+
+const changeProfile=asyncHandler(async(req,res)=>{
+    const {name,username,bio} =req.body;
+
+    if(!name || !username || !bio){
+        throw new Apierror(400,"please enter the details")
+    }
+
+    const updateduser=await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set:{
+                name,
+                username,
+                bio
+            }
+        },
+        {
+            new:true
+        }
+    ).select("-password -refreshToken");
+
+    if(!updateduser){
+        throw new Apierror(400,"user not found")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            {},
+            "profile updated successfully"
+        )
+    )
+})
+
+const updateProfileImage = asyncHandler(async (req, res) => {
+
+    if (!req.file) {
+        throw new Apierror(400, "Profile image is required");
+    }
+
+    const upload = await cloudinary.uploader.upload(req.file.path);
+
+    if (!upload) {
+        throw new Apierror(500, "Failed to upload");
+    }
+
+    const updateduser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                profileimage: upload.secure_url,
+                profileimagepublicid: upload.public_id
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password -refreshToken");
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                updateduser,
+                "Profile image updated successfully"
+            )
+        );
+});
+
+
 export {
     registeruser,
     loginuser,
@@ -294,7 +396,9 @@ export {
     refreshAccessToken,
     forgotPassword,
     resetPassword,
-
+    changePassword,
+    changeProfile,
+    updateProfileImage,
 
 
 }
