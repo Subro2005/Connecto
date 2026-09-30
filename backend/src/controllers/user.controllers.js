@@ -387,6 +387,54 @@ const updateProfileImage = asyncHandler(async (req, res) => {
         );
 });
 
+const followUser = asyncHandler(async (req, res) => {
+
+    // My ID
+    const currentUserId = req.user._id;
+
+    // ID of the person I want to follow
+    const targetUserId = req.params.userId;
+
+    // Cannot follow yourself
+    if (currentUserId.toString() === targetUserId) {
+        throw new Apierror(400, "You cannot follow yourself");
+    }
+
+    // Find both users
+    const currentUser = await User.findById(currentUserId);
+    const targetUser = await User.findById(targetUserId);
+
+    if (!targetUser) {
+        throw new Apierror(404, "User not found");
+    }
+
+    // Check if already following
+    if (currentUser.following.includes(targetUserId)) {
+        throw new Apierror(400, "You are already following this user");
+    }
+
+    // Add target user's ID to my following
+    currentUser.following.push(targetUserId);
+
+    // Add my ID to target user's followers
+    targetUser.followers.push(currentUserId);
+
+    // Save both
+    await currentUser.save();
+    await targetUser.save();
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {},
+                "User followed successfully"
+            )
+        );
+});
+
+
 
 export {
     registeruser,
@@ -399,7 +447,6 @@ export {
     changePassword,
     changeProfile,
     updateProfileImage,
-
-
+    followUser,
 }
 
